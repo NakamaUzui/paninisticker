@@ -3,6 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#090d14">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Panini 2026">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icons/icon.svg">
     <title>Panini 2026 — Premium Grid Dashboard</title>
     <style>
         :root {
@@ -68,15 +73,255 @@
             letter-spacing: -0.5px;
         }
 
+        .stats-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+        }
+
         .stats-badge {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            padding: 8px 16px;
+            padding: 8px 14px;
             border-radius: 20px;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .stats-badge.doubles { color: var(--primary); }
+        .stats-badge.needed { color: var(--accent-gold); border-color: rgba(255, 183, 3, 0.35); }
+        .stats-badge.progress { color: var(--text-main); }
+
+        .progress-wrap {
+            width: 100%;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .progress-label strong {
+            color: var(--text-main);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--bg-input);
+            border-radius: 999px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), #4ade80);
+            border-radius: 999px;
+            transition: width 0.35s ease;
+            width: 0%;
+        }
+
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tool-btn {
+            flex: 1 1 auto;
+            min-width: 0;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text-main);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .tool-btn:hover {
+            border-color: var(--text-muted);
+            background: #172230;
+        }
+
+        .tool-btn.primary {
+            background: rgba(34, 197, 94, 0.15);
+            border-color: rgba(34, 197, 94, 0.45);
             color: var(--primary);
-            box-shadow: 0 4px 10px rgba(34, 197, 94, 0.1);
+        }
+
+        .tool-btn.gold {
+            background: rgba(255, 183, 3, 0.12);
+            border-color: rgba(255, 183, 3, 0.4);
+            color: var(--accent-gold);
+        }
+
+        .mode-toggle {
+            display: flex;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 3px;
+            gap: 3px;
+        }
+
+        .mode-btn {
+            flex: 1;
+            padding: 8px 10px;
+            border: none;
+            border-radius: 7px;
+            background: transparent;
+            color: var(--text-muted);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .mode-btn.active-doubles {
+            background: rgba(34, 197, 94, 0.2);
+            color: var(--primary);
+        }
+
+        .mode-btn.active-needed {
+            background: rgba(255, 183, 3, 0.2);
+            color: var(--accent-gold);
+        }
+
+        .country-tile.has-needed {
+            border-color: rgba(255, 183, 3, 0.4);
+        }
+
+        .tile-counter-needed {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: var(--accent-gold);
+            color: var(--bg-dark);
+            font-size: 11px;
+            font-weight: 800;
+            padding: 2px 7px;
+            border-radius: 8px;
+        }
+
+        .country-tile.has-doubles.has-needed .tile-counter {
+            right: 10px;
+        }
+
+        .sticker-box.needed-active {
+            background-color: rgba(255, 183, 3, 0.12);
+            border-color: var(--accent-gold);
+            box-shadow: inset 0 0 10px rgba(255, 183, 3, 0.12);
+        }
+
+        .sticker-box.needed-active .sticker-code {
+            color: var(--accent-gold);
+            background: rgba(255, 183, 3, 0.15);
+            border-color: rgba(255, 183, 3, 0.45);
+        }
+
+        .sticker-box.needed-active .slot-num {
+            color: var(--accent-gold);
+        }
+
+        .mini-btn.plus-needed {
+            background-color: rgba(255, 183, 3, 0.2);
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
+        }
+
+        .slot-btn.plus-needed {
+            background: rgba(255, 183, 3, 0.15);
+            border-color: rgba(255, 183, 3, 0.45);
+            color: var(--accent-gold);
+        }
+
+        .list-modal-body {
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        .list-entry {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+        }
+
+        .list-entry:last-child { border-bottom: none; }
+
+        .list-entry-code {
+            font-weight: 800;
+            color: var(--accent-gold);
+            white-space: nowrap;
+        }
+
+        .list-entry-name {
+            color: var(--text-muted);
+            text-align: right;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .backup-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 8px 0;
+        }
+
+        .backup-actions p {
+            margin: 0;
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .backup-actions input[type="file"] {
+            display: none;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(80px);
+            background: var(--bg-card);
+            border: 1px solid var(--primary);
+            color: var(--text-main);
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            z-index: 9999;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            max-width: min(90vw, 360px);
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .modal-mode-bar {
+            display: flex;
+            padding: 0 20px 12px;
+            border-bottom: 1px solid var(--border);
         }
 
         .search-input {
@@ -486,6 +731,12 @@
                 box-shadow: inset 0 0 0 1px rgba(34, 197, 94, 0.35);
             }
 
+            .sticker-box.needed-active {
+                background: rgba(255, 183, 3, 0.18);
+                border-color: var(--accent-gold);
+                box-shadow: inset 0 0 0 1px rgba(255, 183, 3, 0.35);
+            }
+
             .desktop-slot {
                 display: none;
             }
@@ -637,6 +888,17 @@
                 font-weight: 700;
                 color: var(--primary);
             }
+
+            .toolbar .tool-btn {
+                flex: 1 1 calc(50% - 4px);
+                font-size: 11px;
+                padding: 9px 8px;
+            }
+
+            .mode-toggle .mode-btn {
+                font-size: 11px;
+                padding: 7px 6px;
+            }
         }
     </style>
 </head>
@@ -646,7 +908,28 @@
         <div class="header-container">
             <div class="title-row">
                 <h1>⚽ Panini 2026 Grid-Hub</h1>
-                <div class="stats-badge" id="totalCounter">0 Doppelte gesamt</div>
+            </div>
+            <div class="progress-wrap">
+                <div class="progress-label">
+                    <span>Album-Fortschritt</span>
+                    <strong id="progressText">0% · 0 fehlen</strong>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+            <div class="stats-row">
+                <div class="stats-badge doubles" id="totalCounter">0 Doppelte</div>
+                <div class="stats-badge needed" id="neededCounter">0 fehlen</div>
+            </div>
+            <div class="mode-toggle">
+                <button type="button" class="mode-btn active-doubles" id="modeDoublesBtn" onclick="setViewMode('doubles')">📦 Doppelte</button>
+                <button type="button" class="mode-btn" id="modeNeededBtn" onclick="setViewMode('needed')">🔍 Brauche ich</button>
+            </div>
+            <div class="toolbar">
+                <button type="button" class="tool-btn primary" onclick="exportTradeList()">📝 Tauschliste → Notizen</button>
+                <button type="button" class="tool-btn gold" onclick="openNeededListModal()">📋 Fehlende anzeigen</button>
+                <button type="button" class="tool-btn" onclick="openBackupModal()">💾 Backup</button>
             </div>
             <input type="text" id="searchInput" class="search-input" placeholder="🔍 Land oder Spieler blitzschnell suchen (z.B. 'Haaland', 'GER', 'Glitzer')..." oninput="renderDashboard()">
         </div>
@@ -662,6 +945,12 @@
                 <h2 class="modal-title" id="modalTitle">Land</h2>
                 <button class="close-btn" onclick="closeModal()">✕</button>
             </div>
+            <div class="modal-mode-bar">
+                <div class="mode-toggle" style="width:100%">
+                    <button type="button" class="mode-btn active-doubles" id="modalModeDoubles" onclick="setViewMode('doubles')">Doppelte</button>
+                    <button type="button" class="mode-btn" id="modalModeNeeded" onclick="setViewMode('needed')">Brauche ich</button>
+                </div>
+            </div>
             <div class="modal-body">
                 <div class="sticker-grid" id="modalStickerGrid"></div>
             </div>
@@ -670,6 +959,38 @@
             </div>
         </div>
     </div>
+
+    <div class="modal" id="neededListModal" onclick="closeNeededListModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h2 class="modal-title">Fehlende Sticker</h2>
+                <button class="close-btn" onclick="closeNeededListModal()">✕</button>
+            </div>
+            <div class="modal-body list-modal-body" id="neededListBody"></div>
+            <div class="modal-footer" style="display:flex;gap:8px;padding:12px 20px;border-top:1px solid var(--border)">
+                <button type="button" class="tool-btn gold" style="flex:1" onclick="exportNeededList()">📝 In Notizen teilen</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="backupModal" onclick="closeBackupModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h2 class="modal-title">Backup</h2>
+                <button class="close-btn" onclick="closeBackupModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="backup-actions">
+                    <p>Sichere deine Doppelten und deine „Brauche ich“-Liste als JSON-Datei. Beim Import werden alle Daten ersetzt.</p>
+                    <button type="button" class="tool-btn primary" onclick="downloadBackup()">⬇️ Backup exportieren</button>
+                    <button type="button" class="tool-btn" onclick="document.getElementById('backupFileInput').click()">⬆️ Backup importieren</button>
+                    <input type="file" id="backupFileInput" accept=".json,application/json" onchange="importBackup(event)">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
 
     <script>
         const categoryLabels = {
@@ -1022,7 +1343,212 @@
             quantities = initialQuantities;
         }
 
+        let needed = JSON.parse(localStorage.getItem('paniniNeeded'));
+        if (!needed || typeof needed !== 'object') {
+            needed = {};
+        }
+
         let activeCategory = null;
+        let viewMode = 'doubles';
+
+        function saveData() {
+            localStorage.setItem('paniniPremiumQty', JSON.stringify(quantities));
+            localStorage.setItem('paniniNeeded', JSON.stringify(needed));
+        }
+
+        function getCategoryNumbers(category) {
+            if (category === 'PANINI') return ['00'];
+            if (category === 'FWC') return Array.from({ length: 19 }, (_, i) => String(i + 1));
+            return Array.from({ length: 20 }, (_, i) => String(i + 1));
+        }
+
+        function getTotalAlbumCount() {
+            return albumOrder.reduce((sum, cat) => sum + getCategoryNumbers(cat).length, 0);
+        }
+
+        function getNeededCount() {
+            return Object.keys(needed).filter(key => needed[key] > 0).length;
+        }
+
+        function getNeededCountForCategory(category) {
+            return getCategoryNumbers(category).reduce((sum, num) => {
+                return sum + (needed[`${category}_${num}`] ? 1 : 0);
+            }, 0);
+        }
+
+        function sortStickerNumbers(numbers) {
+            return [...numbers].sort((a, b) => {
+                if (a === '00') return -1;
+                if (b === '00') return 1;
+                return parseInt(a, 10) - parseInt(b, 10);
+            });
+        }
+
+        function formatCountryExport(store) {
+            const lines = [];
+            albumOrder.forEach(category => {
+                const expanded = [];
+                getCategoryNumbers(category).forEach(num => {
+                    const qty = store[`${category}_${num}`] || 0;
+                    for (let i = 0; i < qty; i++) expanded.push(num);
+                });
+                if (expanded.length === 0) return;
+                lines.push(`${category}: ${sortStickerNumbers(expanded).join(',')},`);
+            });
+            return lines.join('\n');
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            clearTimeout(showToast._timer);
+            showToast._timer = setTimeout(() => toast.classList.remove('show'), 3200);
+        }
+
+        async function shareToNotes(title, text) {
+            if (navigator.share) {
+                try {
+                    await navigator.share({ title, text });
+                    showToast('✅ Geteilt — wähle „Notizen“');
+                    return;
+                } catch (err) {
+                    if (err.name === 'AbortError') return;
+                }
+            }
+            try {
+                await navigator.clipboard.writeText(text);
+                showToast('📋 Kopiert! In Notizen einfügen');
+            } catch {
+                window.prompt('Liste kopieren:', text);
+            }
+        }
+
+        function exportTradeList() {
+            const text = formatCountryExport(quantities);
+            if (!text.trim()) {
+                showToast('Keine Doppelten zum Exportieren');
+                return;
+            }
+            shareToNotes('Panini Doppelte', text);
+        }
+
+        function exportNeededList() {
+            const text = formatCountryExport(needed);
+            if (!text.trim()) {
+                showToast('Keine fehlenden Sticker eingetragen');
+                return;
+            }
+            shareToNotes('Panini — Brauche ich', text);
+        }
+
+        function downloadBackup() {
+            const payload = {
+                version: 1,
+                exportedAt: new Date().toISOString(),
+                quantities,
+                needed
+            };
+            const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `panini-backup-${new Date().toISOString().slice(0, 10)}.json`;
+            link.click();
+            URL.revokeObjectURL(link.href);
+            showToast('💾 Backup heruntergeladen');
+        }
+
+        function importBackup(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = () => {
+                try {
+                    const data = JSON.parse(reader.result);
+                    if (!confirm('Alle aktuellen Daten mit dem Backup ersetzen?')) return;
+                    quantities = data.quantities && typeof data.quantities === 'object' ? data.quantities : {};
+                    needed = data.needed && typeof data.needed === 'object' ? data.needed : {};
+                    saveData();
+                    closeBackupModal();
+                    renderDashboard();
+                    if (activeCategory) openModal(activeCategory);
+                    showToast('✅ Backup importiert');
+                } catch {
+                    showToast('❌ Ungültige Backup-Datei');
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+        function openBackupModal() {
+            document.getElementById('backupModal').classList.add('open');
+        }
+
+        function closeBackupModal() {
+            document.getElementById('backupModal').classList.remove('open');
+        }
+
+        function openNeededListModal() {
+            const body = document.getElementById('neededListBody');
+            const entries = [];
+            albumOrder.forEach(category => {
+                getCategoryNumbers(category).forEach(num => {
+                    if (needed[`${category}_${num}`] > 0) {
+                        entries.push({
+                            code: `${category} ${num}`,
+                            name: getStickerName(category, num)
+                        });
+                    }
+                });
+            });
+            if (entries.length === 0) {
+                body.innerHTML = '<div class="no-results">Noch keine fehlenden Sticker eingetragen.<br>Modus „Brauche ich“ aktivieren und Sticker markieren.</div>';
+            } else {
+                body.innerHTML = entries.map(e => `
+                    <div class="list-entry">
+                        <span class="list-entry-code">${e.code}</span>
+                        <span class="list-entry-name">${e.name}</span>
+                    </div>
+                `).join('');
+            }
+            document.getElementById('neededListModal').classList.add('open');
+        }
+
+        function closeNeededListModal() {
+            document.getElementById('neededListModal').classList.remove('open');
+        }
+
+        function setViewMode(mode) {
+            viewMode = mode;
+            updateModeToggleUI();
+            if (activeCategory) openModal(activeCategory);
+        }
+
+        function updateModeToggleUI() {
+            const isDoubles = viewMode === 'doubles';
+            ['modeDoublesBtn', 'modalModeDoubles'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.className = `mode-btn ${isDoubles ? 'active-doubles' : ''}`;
+            });
+            ['modeNeededBtn', 'modalModeNeeded'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.className = `mode-btn ${!isDoubles ? 'active-needed' : ''}`;
+            });
+        }
+
+        function updateHeaderStats() {
+            const totalDoubles = Object.values(quantities).reduce((s, q) => s + q, 0);
+            const neededCount = getNeededCount();
+            const totalAlbum = getTotalAlbumCount();
+            const collected = Math.max(0, totalAlbum - neededCount);
+            const pct = totalAlbum > 0 ? Math.round((collected / totalAlbum) * 100) : 0;
+
+            document.getElementById('totalCounter').textContent = `${totalDoubles} Doppelte`;
+            document.getElementById('neededCounter').textContent = `${neededCount} fehlen`;
+            document.getElementById('progressText').textContent = `${pct}% · ${neededCount} fehlen`;
+            document.getElementById('progressFill').style.width = `${pct}%`;
+        }
 
         function getStickerName(category, num) {
             if (scaniniDatabase[category] && scaniniDatabase[category][num]) {
@@ -1032,15 +1558,7 @@
         }
 
         function getTrackedCount(category) {
-            let numbers = [];
-            if (category === 'PANINI') numbers = ["00"];
-            else if (category === 'FWC') {
-                for (let i = 1; i <= 19; i++) numbers.push(i.toString());
-            } else {
-                for (let i = 1; i <= 20; i++) numbers.push(i.toString());
-            }
-
-            return numbers.reduce((sum, num) => {
+            return getCategoryNumbers(category).reduce((sum, num) => {
                 return sum + (quantities[`${category}_${num}`] || 0);
             }, 0);
         }
@@ -1049,27 +1567,20 @@
             const gridContainer = document.getElementById('countriesGrid');
             const searchTerm = document.getElementById('searchInput').value.toLowerCase();
             gridContainer.innerHTML = '';
-            
-            let totalDoublesGlobal = 0;
+
             let tilesRendered = 0;
 
             albumOrder.forEach(category => {
-                let numbers = [];
-                if (category === 'PANINI') numbers = ["00"];
-                else if (category === 'FWC') { for(let i=1; i<=19; i++) numbers.push(i.toString()); }
-                else { for(let i=1; i<=20; i++) numbers.push(i.toString()); }
-
+                const numbers = getCategoryNumbers(category);
                 let showTile = false;
-                let teamDoubles = getTrackedCount(category);
+                const teamDoubles = getTrackedCount(category);
+                const teamNeeded = getNeededCountForCategory(category);
 
                 numbers.forEach(num => {
                     const name = getStickerName(category, num);
-                    const qty = quantities[`${category}_${num}`] || 0;
-                    totalDoublesGlobal += qty;
-                    
                     const labelName = categoryLabels[category] ? categoryLabels[category].toLowerCase() : '';
-                    if (category.toLowerCase().includes(searchTerm) || 
-                        num.includes(searchTerm) || 
+                    if (category.toLowerCase().includes(searchTerm) ||
+                        num.includes(searchTerm) ||
                         name.toLowerCase().includes(searchTerm) ||
                         labelName.includes(searchTerm)) {
                         showTile = true;
@@ -1079,13 +1590,20 @@
                 if (showTile) {
                     tilesRendered++;
                     const tile = document.createElement('div');
-                    tile.className = `country-tile ${teamDoubles > 0 ? 'has-doubles' : ''}`;
+                    tile.className = `country-tile${teamDoubles > 0 ? ' has-doubles' : ''}${teamNeeded > 0 ? ' has-needed' : ''}`;
                     tile.onclick = () => openModal(category);
 
                     tile.innerHTML = `
                         <div class="tile-code">${category}</div>
                         <div class="tile-name">${categoryLabels[category] || category}</div>
                     `;
+
+                    if (teamNeeded > 0) {
+                        const needCounter = document.createElement('div');
+                        needCounter.className = 'tile-counter-needed';
+                        needCounter.textContent = teamNeeded;
+                        tile.appendChild(needCounter);
+                    }
 
                     if (teamDoubles > 0) {
                         const counter = document.createElement('div');
@@ -1098,58 +1616,63 @@
                 }
             });
 
-            document.getElementById('totalCounter').textContent = `${totalDoublesGlobal} Doppelte gesamt`;
-
             if (tilesRendered === 0) {
                 gridContainer.innerHTML = '<div class="no-results">Keine passenden Länder oder Spieler gefunden.</div>';
             }
 
-            localStorage.setItem('paniniPremiumQty', JSON.stringify(quantities));
+            updateHeaderStats();
+            saveData();
         }
 
         function openModal(category) {
             activeCategory = category;
+            updateModeToggleUI();
             document.getElementById('modalTitle').textContent = `${categoryLabels[category] || category} (${category})`;
-            
+
             const grid = document.getElementById('modalStickerGrid');
             grid.innerHTML = '';
             grid.className = 'sticker-grid';
             if (category === 'PANINI') grid.classList.add('grid-panini');
             else if (category === 'FWC') grid.classList.add('grid-fwc');
 
-            let numbers = [];
-            if (category === 'PANINI') numbers = ["00"];
-            else if (category === 'FWC') { for(let i=1; i<=19; i++) numbers.push(i.toString()); }
-            else { for(let i=1; i<=20; i++) numbers.push(i.toString()); }
-
+            const numbers = getCategoryNumbers(category);
+            const isNeededMode = viewMode === 'needed';
             let teamTotal = 0;
 
             numbers.forEach(num => {
                 const name = getStickerName(category, num);
-                const qty = quantities[`${category}_${num}`] || 0;
-                teamTotal += qty;
+                const key = `${category}_${num}`;
+                const qty = quantities[key] || 0;
+                const isNeeded = needed[key] > 0;
+                const isActive = isNeededMode ? isNeeded : qty > 0;
+                if (isNeededMode) teamTotal += isNeeded ? 1 : 0;
+                else teamTotal += qty;
 
                 const box = document.createElement('div');
-                box.className = `sticker-box ${qty > 0 ? 'active' : ''}`;
-                box.setAttribute('data-qty', qty);
+                box.className = `sticker-box${isActive ? (isNeededMode ? ' needed-active' : ' active') : ''}`;
+                if (!isNeededMode) box.setAttribute('data-qty', qty);
 
                 let subTag = '';
                 let special = '';
-                if (category === 'PANINI' || category === 'FWC' || num === "1") {
+                if (category === 'PANINI' || category === 'FWC' || num === '1') {
                     subTag = '<span class="special-type type-glitzer">✨ Glitzer</span>';
                     special = 'glitzer';
-                } else if (num === "13") {
+                } else if (num === '13') {
                     subTag = '<span class="special-type type-team">👥 Team</span>';
                     special = 'team';
                 }
                 if (special) box.setAttribute('data-special', special);
 
+                const plusClass = isNeededMode ? 'plus-needed' : 'plus';
+                const displayQty = isNeededMode ? (isNeeded ? 1 : 0) : qty;
+                const clickHandler = isNeededMode ? 'handleNeedClick' : 'handleBoxClick';
+
                 box.innerHTML = `
                     <div class="mobile-slot">
                         <div class="mobile-slot-row">
-                            <button type="button" class="slot-btn" onclick="event.stopPropagation(); handleBoxClick('${category}', '${num}', -1)">−</button>
+                            <button type="button" class="slot-btn" onclick="event.stopPropagation(); ${clickHandler}('${category}', '${num}', -1)">−</button>
                             <span class="slot-num">${num}</span>
-                            <button type="button" class="slot-btn plus" onclick="event.stopPropagation(); handleBoxClick('${category}', '${num}', 1)">+</button>
+                            <button type="button" class="slot-btn ${plusClass}" onclick="event.stopPropagation(); ${clickHandler}('${category}', '${num}', 1)">+</button>
                         </div>
                         <div class="slot-name">${name}</div>
                     </div>
@@ -1158,14 +1681,14 @@
                         <div class="sticker-name">${name}</div>
                         ${subTag}
                         <div class="control-row">
-                            <button class="mini-btn" onclick="event.stopPropagation(); handleBoxClick('${category}', '${num}', -1)">-</button>
-                            <span class="box-qty">${qty}</span>
-                            <button class="mini-btn plus" onclick="event.stopPropagation(); handleBoxClick('${category}', '${num}', 1)">+</button>
+                            <button class="mini-btn" onclick="event.stopPropagation(); ${clickHandler}('${category}', '${num}', -1)">-</button>
+                            <span class="box-qty">${displayQty}</span>
+                            <button class="mini-btn ${plusClass}" onclick="event.stopPropagation(); ${clickHandler}('${category}', '${num}', 1)">+</button>
                         </div>
                     </div>
                 `;
 
-                if (!window.matchMedia('(max-width: 600px)').matches) {
+                if (!window.matchMedia('(max-width: 600px)').matches && !isNeededMode) {
                     box.onclick = () => handleBoxClick(category, num, 1);
                 }
 
@@ -1174,7 +1697,13 @@
 
             const teamTotalEl = document.getElementById('modalTeamTotal');
             if (teamTotalEl) {
-                teamTotalEl.textContent = teamTotal > 0 ? `${teamTotal} Doppelte` : '';
+                if (isNeededMode) {
+                    teamTotalEl.textContent = teamTotal > 0 ? `${teamTotal} fehlen in diesem Team` : '';
+                    teamTotalEl.style.color = 'var(--accent-gold)';
+                } else {
+                    teamTotalEl.textContent = teamTotal > 0 ? `${teamTotal} Doppelte` : '';
+                    teamTotalEl.style.color = 'var(--primary)';
+                }
             }
 
             document.getElementById('stickerModal').classList.add('open');
@@ -1194,12 +1723,27 @@
             if (currentQty <= 0) delete quantities[key];
             else quantities[key] = currentQty;
 
-            // Sofortiges Update des geöffneten Modals
+            saveData();
+            updateHeaderStats();
             openModal(category);
         }
 
-        // Start auslösen
+        function handleNeedClick(category, number, change) {
+            const key = `${category}_${number}`;
+            if (change > 0) needed[key] = 1;
+            else delete needed[key];
+
+            saveData();
+            updateHeaderStats();
+            openModal(category);
+        }
+
+        updateModeToggleUI();
         renderDashboard();
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').catch(() => {});
+        }
     </script>
 </body>
 </html>
