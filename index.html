@@ -1665,9 +1665,10 @@
         }
 
         async function shareToNotes(title, text) {
+            const noteText = `${title}\n\n${text}`;
             if (navigator.share) {
                 try {
-                    await navigator.share({ title, text });
+                    await navigator.share({ title, text: noteText });
                     showToast('✅ Geteilt — wähle „Notizen“');
                     return;
                 } catch (err) {
@@ -1675,10 +1676,10 @@
                 }
             }
             try {
-                await navigator.clipboard.writeText(text);
+                await navigator.clipboard.writeText(noteText);
                 showToast('📋 Kopiert! In Notizen einfügen');
             } catch {
-                window.prompt('Liste kopieren:', text);
+                window.prompt('Liste kopieren:', noteText);
             }
         }
 
