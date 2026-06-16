@@ -292,6 +292,203 @@
             display: none;
         }
 
+        .tool-btn.compare {
+            background: rgba(59, 130, 246, 0.15);
+            border-color: rgba(59, 130, 246, 0.45);
+            color: #60a5fa;
+        }
+
+        .compare-modal-body {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .compare-hint {
+            margin: 0;
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .compare-textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 14px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text-main);
+            font-size: 14px;
+            font-family: inherit;
+            line-height: 1.45;
+            resize: vertical;
+            box-sizing: border-box;
+        }
+
+        .compare-textarea:focus {
+            outline: none;
+            border-color: #60a5fa;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+
+        .compare-default-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .compare-default-row label {
+            font-size: 13px;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        .compare-default-row select {
+            flex: 1;
+            min-width: 140px;
+            padding: 10px 12px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-main);
+            font-size: 13px;
+        }
+
+        .compare-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .compare-summary {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-main);
+            padding: 10px 14px;
+            background: var(--bg-input);
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+
+        .compare-summary.has-hits {
+            border-color: rgba(34, 197, 94, 0.45);
+            color: var(--primary);
+        }
+
+        .compare-results {
+            max-height: 45vh;
+            overflow-y: auto;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.15);
+        }
+
+        .compare-result {
+            padding: 11px 14px;
+            font-size: 13px;
+            border-bottom: 1px solid var(--border);
+            line-height: 1.4;
+        }
+
+        .compare-result:last-child {
+            border-bottom: none;
+        }
+
+        .compare-result.hit {
+            background: rgba(34, 197, 94, 0.08);
+        }
+
+        .compare-result.miss {
+            background: rgba(239, 35, 60, 0.06);
+        }
+
+        .compare-result.unknown {
+            background: rgba(255, 183, 3, 0.06);
+            color: var(--accent-gold);
+        }
+
+        .compare-name {
+            display: block;
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        #copyHitsBtn {
+            display: none;
+        }
+
+        .compare-photo-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .compare-photo-row input[type="file"] {
+            display: none;
+        }
+
+        .compare-photo-preview-wrap {
+            display: none;
+            align-items: center;
+            gap: 10px;
+            padding: 8px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+        }
+
+        .compare-photo-preview-wrap.visible {
+            display: flex;
+        }
+
+        .compare-photo-preview {
+            width: 56px;
+            height: 56px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .compare-photo-preview-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.35;
+        }
+
+        .compare-ocr-loading {
+            display: none;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 14px;
+            background: rgba(59, 130, 246, 0.12);
+            border: 1px solid rgba(59, 130, 246, 0.35);
+            border-radius: 10px;
+            font-size: 13px;
+            color: #93c5fd;
+        }
+
+        .compare-ocr-loading.visible {
+            display: flex;
+        }
+
+        .compare-ocr-spinner {
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(147, 197, 253, 0.25);
+            border-top-color: #93c5fd;
+            border-radius: 50%;
+            animation: compareSpin 0.8s linear infinite;
+            flex-shrink: 0;
+        }
+
+        @keyframes compareSpin {
+            to { transform: rotate(360deg); }
+        }
+
         .toast {
             position: fixed;
             bottom: 24px;
@@ -1109,6 +1306,7 @@
                 <button type="button" class="mode-btn" id="modeNeededBtn" onclick="setViewMode('needed')">🔍 Brauche ich</button>
             </div>
             <div class="toolbar">
+                <button type="button" class="tool-btn compare" onclick="openCompareModal()">🔎 Abgleich / Habe ich?</button>
                 <button type="button" class="tool-btn primary" onclick="exportTradeList()">📝 Tauschliste → Notizen</button>
                 <button type="button" class="tool-btn gold" onclick="openNeededListModal()">📋 Fehlende anzeigen</button>
                 <button type="button" class="tool-btn" onclick="openBackupModal()">💾 Backup</button>
@@ -1176,6 +1374,49 @@
                     <button type="button" class="tool-btn" onclick="document.getElementById('backupFileInput').click()">⬆️ Backup importieren</button>
                     <input type="file" id="backupFileInput" accept=".json,application/json" onchange="importBackup(event)">
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="compareModal" onclick="closeCompareModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <div class="modal-header-main" style="padding-right:0">
+                    <h2 class="modal-title">Abgleich / Habe ich?</h2>
+                </div>
+                <button class="close-btn" onclick="closeCompareModal()">✕</button>
+            </div>
+            <div class="modal-body compare-modal-body">
+                <p class="compare-hint">Text einfügen <strong>oder Foto von Willhaben</strong> hochladen. Formate: <strong>GER 15, MEX 2</strong> · <strong>GER: 15,16,</strong> · Team-Foto nur Nummern → <strong>Land wählen</strong></p>
+                <div class="compare-photo-row">
+                    <button type="button" class="tool-btn compare" onclick="document.getElementById('comparePhotoInput').click()">📷 Foto hochladen</button>
+                    <input type="file" id="comparePhotoInput" accept="image/*" onchange="handleComparePhoto(event)">
+                </div>
+                <div class="compare-photo-preview-wrap" id="comparePhotoPreviewWrap">
+                    <img id="comparePhotoPreview" class="compare-photo-preview" alt="Hochgeladenes Foto">
+                    <span class="compare-photo-preview-label">Erkannten Text unten prüfen und ggf. korrigieren.</span>
+                </div>
+                <div class="compare-ocr-loading" id="compareOcrLoading">
+                    <div class="compare-ocr-spinner"></div>
+                    <span id="compareOcrLoadingText">Foto wird gelesen… (kann 15–30 Sek. dauern)</span>
+                </div>
+                <textarea id="compareInput" class="compare-textarea" placeholder="Beispiel:
+GER 15, GER 16, MEX 2
+oder
+MAR: 1,4,12,
+FWC: 5,10,11"></textarea>
+                <div class="compare-default-row">
+                    <label for="compareDefaultCountry">Nur Nummern (optional Land):</label>
+                    <select id="compareDefaultCountry">
+                        <option value="">— keins —</option>
+                    </select>
+                </div>
+                <div class="compare-actions">
+                    <button type="button" class="tool-btn compare" style="flex:1" onclick="runCompare()">🔎 Abgleichen</button>
+                    <button type="button" class="tool-btn primary" id="copyHitsBtn" onclick="copyCompareHits()">📋 Treffer kopieren</button>
+                </div>
+                <div class="compare-summary" id="compareSummary"></div>
+                <div class="compare-results" id="compareResults"></div>
             </div>
         </div>
     </div>
@@ -1654,6 +1895,306 @@
                 lines.push(`${category}: ${sortStickerNumbers(expanded).join(',')},`);
             });
             return lines.join('\n');
+        }
+
+        const countryLookup = {};
+        albumOrder.forEach(code => {
+            countryLookup[code.toLowerCase()] = code;
+            const label = (categoryLabels[code] || '').replace(/^[^\p{L}\p{N}]+/u, '').trim();
+            if (label) {
+                countryLookup[label.toLowerCase()] = code;
+                label.split(/[\s&]+/).forEach(part => {
+                    if (part.length > 2) countryLookup[part.toLowerCase()] = code;
+                });
+            }
+        });
+
+        let lastCompareHits = [];
+
+        function resolveCountryCode(token) {
+            if (!token) return null;
+            const cleaned = token.trim().replace(/[^a-zA-ZäöüÄÖÜß]/g, '');
+            if (!cleaned) return null;
+            const upper = cleaned.toUpperCase();
+            if (albumOrder.includes(upper)) return upper;
+            return countryLookup[cleaned.toLowerCase()] || countryLookup[token.trim().toLowerCase()] || null;
+        }
+
+        function normalizeStickerNumber(numStr) {
+            const s = numStr.trim();
+            if (s === '00' || s === '0') return '00';
+            const n = parseInt(s, 10);
+            if (Number.isNaN(n)) return null;
+            return String(n);
+        }
+
+        function extractNumbers(str) {
+            return str.split(/[,;\s]+/)
+                .map(normalizeStickerNumber)
+                .filter(n => n !== null);
+        }
+
+        function isValidSticker(category, num) {
+            return getCategoryNumbers(category).includes(num);
+        }
+
+        function addCompareRequest(requests, invalid, category, num) {
+            if (!category) {
+                invalid.push(num);
+                return;
+            }
+            if (isValidSticker(category, num)) {
+                requests.push({ category, num });
+            } else {
+                invalid.push(`${category} ${num}`);
+            }
+        }
+
+        function parseCompareInput(text, defaultCountry) {
+            const requests = [];
+            const invalid = [];
+
+            text.split(/\n+/).forEach(line => {
+                let trimmed = line.trim();
+                if (!trimmed) return;
+                if (/^PANINI\s-/i.test(trimmed)) return;
+
+                trimmed = trimmed.replace(/,\s*$/, '');
+
+                const colonMatch = trimmed.match(/^([A-Za-zÄÖÜäöüß]{2,12})\s*[:_\-]\s*(.+)$/);
+                if (colonMatch) {
+                    const cat = resolveCountryCode(colonMatch[1]);
+                    extractNumbers(colonMatch[2]).forEach(num => addCompareRequest(requests, invalid, cat, num));
+                    return;
+                }
+
+                const codeNumMatch = trimmed.match(/^([A-Za-z]{2,6})\s+(.+)$/);
+                if (codeNumMatch) {
+                    const cat = resolveCountryCode(codeNumMatch[1]);
+                    extractNumbers(codeNumMatch[2]).forEach(num => addCompareRequest(requests, invalid, cat, num));
+                    return;
+                }
+
+                const nameNumMatch = trimmed.match(/^(.+?)\s+([\d,\s;]+)$/);
+                if (nameNumMatch) {
+                    const cat = resolveCountryCode(nameNumMatch[1]);
+                    if (cat) {
+                        extractNumbers(nameNumMatch[2]).forEach(num => addCompareRequest(requests, invalid, cat, num));
+                        return;
+                    }
+                }
+
+                if (defaultCountry) {
+                    extractNumbers(trimmed).forEach(num => addCompareRequest(requests, invalid, defaultCountry, num));
+                    return;
+                }
+
+                invalid.push(trimmed);
+            });
+
+            return { requests, invalid };
+        }
+
+        function populateCompareCountrySelect() {
+            const select = document.getElementById('compareDefaultCountry');
+            if (!select || select.options.length > 1) return;
+            albumOrder.forEach(code => {
+                const opt = document.createElement('option');
+                opt.value = code;
+                opt.textContent = `${code} — ${categoryLabels[code] || code}`;
+                select.appendChild(opt);
+            });
+        }
+
+        function openCompareModal() {
+            populateCompareCountrySelect();
+            document.getElementById('compareModal').classList.add('open');
+            if (!document.getElementById('compareInput').value.trim()) {
+                document.getElementById('compareSummary').textContent = '';
+                document.getElementById('compareResults').innerHTML = '<div class="compare-result unknown" style="text-align:center;color:var(--text-muted)">Liste einfügen und „Abgleichen“ tippen.</div>';
+                document.getElementById('copyHitsBtn').style.display = 'none';
+            }
+        }
+
+        function closeCompareModal() {
+            document.getElementById('compareModal').classList.remove('open');
+        }
+
+        function runCompare() {
+            const text = document.getElementById('compareInput').value;
+            const defaultCountry = document.getElementById('compareDefaultCountry').value || null;
+
+            if (!text.trim()) {
+                showToast('Bitte zuerst eine Liste eingeben');
+                return;
+            }
+
+            const { requests, invalid } = parseCompareInput(text, defaultCountry);
+            const unique = [];
+            const seen = new Set();
+            requests.forEach(r => {
+                const key = `${r.category}_${r.num}`;
+                if (!seen.has(key)) {
+                    seen.add(key);
+                    unique.push(r);
+                }
+            });
+
+            let hits = 0;
+            lastCompareHits = [];
+            const resultParts = [];
+
+            unique.forEach(({ category, num }) => {
+                const key = `${category}_${num}`;
+                const qty = quantities[key] || 0;
+                const name = getStickerName(category, num);
+
+                if (qty > 0) {
+                    hits++;
+                    lastCompareHits.push({ category, num, qty, name });
+                    resultParts.push(`
+                        <div class="compare-result hit">
+                            ✅ <strong>${category} ${num}</strong> — ${qty}× Doppelt
+                            <span class="compare-name">${name}</span>
+                        </div>
+                    `);
+                } else {
+                    resultParts.push(`
+                        <div class="compare-result miss">
+                            ❌ <strong>${category} ${num}</strong> — nicht vorhanden
+                            <span class="compare-name">${name}</span>
+                        </div>
+                    `);
+                }
+            });
+
+            invalid.forEach(item => {
+                resultParts.push(`<div class="compare-result unknown">⚠️ „${item}“ — nicht erkannt</div>`);
+            });
+
+            const summaryEl = document.getElementById('compareSummary');
+            if (unique.length === 0) {
+                summaryEl.textContent = invalid.length ? 'Keine gültigen Sticker erkannt' : 'Keine Einträge gefunden';
+                summaryEl.className = 'compare-summary';
+            } else {
+                summaryEl.textContent = `${hits} von ${unique.length} hast du als Doppelte`;
+                summaryEl.className = `compare-summary${hits > 0 ? ' has-hits' : ''}`;
+            }
+
+            document.getElementById('compareResults').innerHTML = resultParts.length
+                ? resultParts.join('')
+                : '<div class="compare-result unknown">Keine Einträge — Format prüfen (z.B. GER 15, MEX: 2,4,)</div>';
+
+            document.getElementById('copyHitsBtn').style.display = hits > 0 ? 'block' : 'none';
+        }
+
+        function copyCompareHits() {
+            if (lastCompareHits.length === 0) return;
+            const lines = [`${lastCompareHits.length} Sticker kann ich anbieten:`, ''];
+            lastCompareHits.forEach(h => {
+                lines.push(`✅ ${h.category} ${h.num} (${h.qty}×) — ${h.name}`);
+            });
+            const text = lines.join('\n');
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('📋 Antwort für Willhaben kopiert');
+            }).catch(() => {
+                window.prompt('Kopieren:', text);
+            });
+        }
+
+        let tesseractLoadPromise = null;
+
+        function loadTesseract() {
+            if (window.Tesseract) return Promise.resolve(window.Tesseract);
+            if (!tesseractLoadPromise) {
+                tesseractLoadPromise = new Promise((resolve, reject) => {
+                    const script = document.createElement('script');
+                    script.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js';
+                    script.onload = () => resolve(window.Tesseract);
+                    script.onerror = () => reject(new Error('OCR konnte nicht geladen werden'));
+                    document.head.appendChild(script);
+                });
+            }
+            return tesseractLoadPromise;
+        }
+
+        function setCompareOcrLoading(active, message) {
+            const el = document.getElementById('compareOcrLoading');
+            const textEl = document.getElementById('compareOcrLoadingText');
+            if (el) el.classList.toggle('visible', active);
+            if (textEl && message) textEl.textContent = message;
+        }
+
+        function preprocessOcrForCompare(text, defaultCountry) {
+            const raw = text.replace(/\r/g, '\n').replace(/[|]/g, '1');
+            const lines = [];
+
+            const colonPattern = /\b([A-Za-z]{2,6})\s*[:]\s*([\d,\s;]+)/g;
+            let match;
+            while ((match = colonPattern.exec(raw)) !== null) {
+                lines.push(`${match[1].toUpperCase()}: ${match[2].replace(/\s+/g, ',').replace(/,+/g, ',')},`);
+            }
+
+            const codeNumPattern = /\b([A-Z]{3})\s+([\d\s,;]+)/g;
+            const upper = raw.toUpperCase();
+            while ((match = codeNumPattern.exec(upper)) !== null) {
+                if (albumOrder.includes(match[1])) {
+                    lines.push(`${match[1]} ${match[2].trim()}`);
+                }
+            }
+
+            if (lines.length > 0) return lines.join('\n');
+
+            if (defaultCountry) {
+                const nums = [...new Set((raw.match(/\b(?:00|[1-9]|1[0-9]|20)\b/g) || []))];
+                if (nums.length) return `${defaultCountry}: ${nums.join(',')},`;
+            }
+
+            return raw.trim();
+        }
+
+        async function handleComparePhoto(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            event.target.value = '';
+
+            const previewWrap = document.getElementById('comparePhotoPreviewWrap');
+            const preview = document.getElementById('comparePhotoPreview');
+            preview.src = URL.createObjectURL(file);
+            previewWrap.classList.add('visible');
+
+            setCompareOcrLoading(true, 'OCR wird geladen…');
+
+            try {
+                const Tesseract = await loadTesseract();
+                setCompareOcrLoading(true, 'Foto wird gelesen… (15–30 Sek.)');
+
+                const { data: { text } } = await Tesseract.recognize(file, 'eng', {
+                    logger: (m) => {
+                        if (m.status === 'recognizing text' && m.progress) {
+                            const pct = Math.round(m.progress * 100);
+                            setCompareOcrLoading(true, `Foto wird gelesen… ${pct}%`);
+                        }
+                    }
+                });
+
+                const defaultCountry = document.getElementById('compareDefaultCountry').value || null;
+                const processed = preprocessOcrForCompare(text, defaultCountry);
+
+                if (!processed.trim()) {
+                    showToast('❌ Kein Text im Foto erkannt — Land wählen oder schärferes Foto');
+                    document.getElementById('compareInput').value = text.trim();
+                    return;
+                }
+
+                document.getElementById('compareInput').value = processed;
+                showToast('📷 Text erkannt — bitte kurz prüfen');
+                runCompare();
+            } catch {
+                showToast('❌ Foto-Lesen fehlgeschlagen — Internet nötig beim ersten Mal');
+            } finally {
+                setCompareOcrLoading(false);
+            }
         }
 
         function showToast(message) {
