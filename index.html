@@ -464,15 +464,145 @@
             padding: 16px 20px;
             border-bottom: 1px solid var(--border);
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 10px;
             background-color: var(--bg-card);
+            position: relative;
+        }
+
+        .modal-header-main {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding-right: 40px;
+        }
+
+        .modal-header .close-btn {
+            position: absolute;
+            top: 14px;
+            right: 16px;
+        }
+
+        .modal-stage {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 920px;
+            gap: 10px;
+            padding: 0 10px;
+            box-sizing: border-box;
+        }
+
+        .modal-stage .modal-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .side-nav {
+            flex-shrink: 0;
+            align-self: center;
+            width: 52px;
+            height: 100px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            background: rgba(19, 26, 38, 0.95);
+            color: var(--text-main);
+            font-size: 36px;
+            font-weight: 300;
+            line-height: 1;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+            transition: all 0.2s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .side-nav:hover:not(:disabled) {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(34, 197, 94, 0.15);
+            transform: scale(1.04);
+        }
+
+        .side-nav:disabled {
+            opacity: 0.18;
+            cursor: default;
+            transform: none;
+        }
+
+        .complete-team-btn {
+            padding: 5px 14px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: var(--bg-input);
+            color: var(--text-muted);
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .complete-team-btn:hover {
+            border-color: var(--text-muted);
+            color: var(--text-main);
+        }
+
+        .complete-team-btn.is-complete {
+            background: rgba(34, 197, 94, 0.18);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .country-tile.is-complete {
+            border-color: rgba(34, 197, 94, 0.55);
+            background: linear-gradient(145deg, var(--bg-card), #12221a);
+        }
+
+        .country-tile.is-complete .tile-code {
+            color: var(--primary);
+        }
+
+        .tile-complete-badge {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            font-weight: 800;
+            color: var(--primary);
+            letter-spacing: 0.5px;
+        }
+
+        .modal-complete-banner {
+            display: none;
+            padding: 8px 16px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary);
+            background: rgba(34, 197, 94, 0.1);
+            border-bottom: 1px solid rgba(34, 197, 94, 0.25);
+        }
+
+        .modal-complete-banner.visible {
+            display: block;
         }
 
         .modal-title {
             margin: 0;
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 700;
+            text-align: center;
+            line-height: 1.2;
         }
 
         .close-btn {
@@ -636,22 +766,74 @@
             }
 
             .modal-content {
-                max-width: 100%;
-                width: 100%;
+                flex: 1;
+                min-width: 0;
+                max-width: none;
+                width: auto;
                 max-height: 100dvh;
-                height: 100dvh;
+                height: auto;
+                align-self: stretch;
                 border-radius: 0;
                 border: none;
+                border-top: none;
+                border-bottom: none;
                 overflow: hidden;
             }
 
+            .modal-stage {
+                max-width: 100%;
+                height: 100%;
+                gap: 0;
+                padding: 0;
+                align-items: stretch;
+            }
+
+            .side-nav {
+                width: 34px;
+                height: auto;
+                align-self: stretch;
+                border-radius: 0;
+                font-size: 28px;
+                background: rgba(9, 13, 20, 0.92);
+                box-shadow: none;
+            }
+
+            .side-nav-prev {
+                border-left: none;
+                border-top: none;
+                border-bottom: none;
+                border-radius: 0 12px 12px 0;
+            }
+
+            .side-nav-next {
+                border-right: none;
+                border-top: none;
+                border-bottom: none;
+                border-radius: 12px 0 0 12px;
+            }
+
             .modal-header {
-                padding: 10px 14px;
+                padding: 10px 10px;
                 flex-shrink: 0;
+                gap: 6px;
+            }
+
+            .modal-header-main {
+                padding-right: 36px;
+            }
+
+            .modal-header .close-btn {
+                top: 10px;
+                right: 10px;
             }
 
             .modal-title {
-                font-size: 16px;
+                font-size: 14px;
+            }
+
+            .complete-team-btn {
+                font-size: 10px;
+                padding: 4px 10px;
             }
 
             .close-btn {
@@ -940,23 +1122,31 @@
     </div>
 
     <div class="modal" id="stickerModal" onclick="closeModal()">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <div class="modal-header">
-                <h2 class="modal-title" id="modalTitle">Land</h2>
-                <button class="close-btn" onclick="closeModal()">✕</button>
-            </div>
-            <div class="modal-mode-bar">
-                <div class="mode-toggle" style="width:100%">
-                    <button type="button" class="mode-btn active-doubles" id="modalModeDoubles" onclick="setViewMode('doubles')">Doppelte</button>
-                    <button type="button" class="mode-btn" id="modalModeNeeded" onclick="setViewMode('needed')">Brauche ich</button>
+        <div class="modal-stage" onclick="event.stopPropagation()">
+            <button type="button" class="side-nav side-nav-prev" id="modalPrevBtn" onclick="event.stopPropagation(); navigateTeam(-1)" aria-label="Vorheriges Team">‹</button>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-header-main">
+                        <h2 class="modal-title" id="modalTitle">Land</h2>
+                        <button type="button" class="complete-team-btn" id="completeTeamBtn" onclick="event.stopPropagation(); toggleTeamComplete()">Als voll markieren</button>
+                    </div>
+                    <button class="close-btn" onclick="closeModal()">✕</button>
+                </div>
+                <div class="modal-complete-banner" id="modalCompleteBanner">✓ Team komplett — du brauchst hier nichts mehr</div>
+                <div class="modal-mode-bar">
+                    <div class="mode-toggle" style="width:100%">
+                        <button type="button" class="mode-btn active-doubles" id="modalModeDoubles" onclick="setViewMode('doubles')">Doppelte</button>
+                        <button type="button" class="mode-btn" id="modalModeNeeded" onclick="setViewMode('needed')">Brauche ich</button>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div class="sticker-grid" id="modalStickerGrid"></div>
+                </div>
+                <div class="modal-footer">
+                    <span class="modal-team-total" id="modalTeamTotal"></span>
                 </div>
             </div>
-            <div class="modal-body">
-                <div class="sticker-grid" id="modalStickerGrid"></div>
-            </div>
-            <div class="modal-footer">
-                <span class="modal-team-total" id="modalTeamTotal"></span>
-            </div>
+            <button type="button" class="side-nav side-nav-next" id="modalNextBtn" onclick="event.stopPropagation(); navigateTeam(1)" aria-label="Nächstes Team">›</button>
         </div>
     </div>
 
@@ -981,7 +1171,7 @@
             </div>
             <div class="modal-body">
                 <div class="backup-actions">
-                    <p>Sichere deine Doppelten und deine „Brauche ich“-Liste als JSON-Datei. Beim Import werden alle Daten ersetzt.</p>
+                    <p>Sichere deine Doppelten, „Brauche ich“-Liste und vollständige Teams als JSON-Datei. Beim Import werden alle Daten ersetzt.</p>
                     <button type="button" class="tool-btn primary" onclick="downloadBackup()">⬇️ Backup exportieren</button>
                     <button type="button" class="tool-btn" onclick="document.getElementById('backupFileInput').click()">⬆️ Backup importieren</button>
                     <input type="file" id="backupFileInput" accept=".json,application/json" onchange="importBackup(event)">
@@ -1348,12 +1538,72 @@
             needed = {};
         }
 
+        let completeTeams = JSON.parse(localStorage.getItem('paniniCompleteTeams'));
+        if (!completeTeams || typeof completeTeams !== 'object') {
+            completeTeams = {};
+        }
+
         let activeCategory = null;
         let viewMode = 'doubles';
 
         function saveData() {
             localStorage.setItem('paniniPremiumQty', JSON.stringify(quantities));
             localStorage.setItem('paniniNeeded', JSON.stringify(needed));
+            localStorage.setItem('paniniCompleteTeams', JSON.stringify(completeTeams));
+        }
+
+        function isTeamComplete(category) {
+            return !!completeTeams[category];
+        }
+
+        function getCategoryIndex(category) {
+            return albumOrder.indexOf(category);
+        }
+
+        function navigateTeam(delta) {
+            if (!activeCategory) return;
+            const idx = getCategoryIndex(activeCategory);
+            const next = idx + delta;
+            if (next < 0 || next >= albumOrder.length) return;
+            openModal(albumOrder[next]);
+        }
+
+        function updateModalNavButtons() {
+            if (!activeCategory) return;
+            const idx = getCategoryIndex(activeCategory);
+            const prevBtn = document.getElementById('modalPrevBtn');
+            const nextBtn = document.getElementById('modalNextBtn');
+            if (prevBtn) prevBtn.disabled = idx <= 0;
+            if (nextBtn) nextBtn.disabled = idx >= albumOrder.length - 1;
+        }
+
+        function updateCompleteTeamButton() {
+            const btn = document.getElementById('completeTeamBtn');
+            const banner = document.getElementById('modalCompleteBanner');
+            if (!btn || !activeCategory) return;
+            const complete = isTeamComplete(activeCategory);
+            btn.className = `complete-team-btn${complete ? ' is-complete' : ''}`;
+            btn.textContent = complete ? '✓ Team voll' : 'Als voll markieren';
+            if (banner) banner.classList.toggle('visible', complete);
+        }
+
+        function toggleTeamComplete() {
+            if (!activeCategory) return;
+            if (isTeamComplete(activeCategory)) {
+                delete completeTeams[activeCategory];
+                showToast('Team wieder geöffnet');
+            } else {
+                completeTeams[activeCategory] = true;
+                getCategoryNumbers(activeCategory).forEach(num => {
+                    delete needed[`${activeCategory}_${num}`];
+                });
+                showToast('✅ Team als voll markiert');
+            }
+            saveData();
+            updateCompleteTeamButton();
+            updateHeaderStats();
+            renderDashboard();
+            openModal(activeCategory);
         }
 
         function getCategoryNumbers(category) {
@@ -1367,10 +1617,18 @@
         }
 
         function getNeededCount() {
-            return Object.keys(needed).filter(key => needed[key] > 0).length;
+            let count = 0;
+            albumOrder.forEach(category => {
+                if (isTeamComplete(category)) return;
+                getCategoryNumbers(category).forEach(num => {
+                    if (needed[`${category}_${num}`] > 0) count++;
+                });
+            });
+            return count;
         }
 
         function getNeededCountForCategory(category) {
+            if (isTeamComplete(category)) return 0;
             return getCategoryNumbers(category).reduce((sum, num) => {
                 return sum + (needed[`${category}_${num}`] ? 1 : 0);
             }, 0);
@@ -1444,10 +1702,11 @@
 
         function downloadBackup() {
             const payload = {
-                version: 1,
+                version: 2,
                 exportedAt: new Date().toISOString(),
                 quantities,
-                needed
+                needed,
+                completeTeams
             };
             const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
             const link = document.createElement('a');
@@ -1468,6 +1727,7 @@
                     if (!confirm('Alle aktuellen Daten mit dem Backup ersetzen?')) return;
                     quantities = data.quantities && typeof data.quantities === 'object' ? data.quantities : {};
                     needed = data.needed && typeof data.needed === 'object' ? data.needed : {};
+                    completeTeams = data.completeTeams && typeof data.completeTeams === 'object' ? data.completeTeams : {};
                     saveData();
                     closeBackupModal();
                     renderDashboard();
@@ -1493,6 +1753,7 @@
             const body = document.getElementById('neededListBody');
             const entries = [];
             albumOrder.forEach(category => {
+                if (isTeamComplete(category)) return;
                 getCategoryNumbers(category).forEach(num => {
                     if (needed[`${category}_${num}`] > 0) {
                         entries.push({
@@ -1539,14 +1800,25 @@
 
         function updateHeaderStats() {
             const totalDoubles = Object.values(quantities).reduce((s, q) => s + q, 0);
-            const neededCount = getNeededCount();
             const totalAlbum = getTotalAlbumCount();
-            const collected = Math.max(0, totalAlbum - neededCount);
+            let missing = 0;
+            let collected = 0;
+            albumOrder.forEach(category => {
+                const nums = getCategoryNumbers(category);
+                if (isTeamComplete(category)) {
+                    collected += nums.length;
+                    return;
+                }
+                nums.forEach(num => {
+                    if (needed[`${category}_${num}`] > 0) missing++;
+                    else collected++;
+                });
+            });
             const pct = totalAlbum > 0 ? Math.round((collected / totalAlbum) * 100) : 0;
 
             document.getElementById('totalCounter').textContent = `${totalDoubles} Doppelte`;
-            document.getElementById('neededCounter').textContent = `${neededCount} fehlen`;
-            document.getElementById('progressText').textContent = `${pct}% · ${neededCount} fehlen`;
+            document.getElementById('neededCounter').textContent = `${missing} fehlen`;
+            document.getElementById('progressText').textContent = `${pct}% · ${missing} fehlen`;
             document.getElementById('progressFill').style.width = `${pct}%`;
         }
 
@@ -1589,13 +1861,15 @@
 
                 if (showTile) {
                     tilesRendered++;
+                    const complete = isTeamComplete(category);
                     const tile = document.createElement('div');
-                    tile.className = `country-tile${teamDoubles > 0 ? ' has-doubles' : ''}${teamNeeded > 0 ? ' has-needed' : ''}`;
+                    tile.className = `country-tile${teamDoubles > 0 ? ' has-doubles' : ''}${teamNeeded > 0 ? ' has-needed' : ''}${complete ? ' is-complete' : ''}`;
                     tile.onclick = () => openModal(category);
 
                     tile.innerHTML = `
                         <div class="tile-code">${category}</div>
                         <div class="tile-name">${categoryLabels[category] || category}</div>
+                        ${complete ? '<div class="tile-complete-badge">✓ VOLL</div>' : ''}
                     `;
 
                     if (teamNeeded > 0) {
@@ -1627,6 +1901,8 @@
         function openModal(category) {
             activeCategory = category;
             updateModeToggleUI();
+            updateModalNavButtons();
+            updateCompleteTeamButton();
             document.getElementById('modalTitle').textContent = `${categoryLabels[category] || category} (${category})`;
 
             const grid = document.getElementById('modalStickerGrid');
@@ -1729,6 +2005,10 @@
         }
 
         function handleNeedClick(category, number, change) {
+            if (isTeamComplete(category)) {
+                showToast('Team ist als voll markiert');
+                return;
+            }
             const key = `${category}_${number}`;
             if (change > 0) needed[key] = 1;
             else delete needed[key];
@@ -1737,6 +2017,12 @@
             updateHeaderStats();
             openModal(category);
         }
+
+        document.addEventListener('keydown', (e) => {
+            if (!document.getElementById('stickerModal').classList.contains('open')) return;
+            if (e.key === 'ArrowLeft') navigateTeam(-1);
+            if (e.key === 'ArrowRight') navigateTeam(1);
+        });
 
         updateModeToggleUI();
         renderDashboard();
