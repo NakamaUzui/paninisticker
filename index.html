@@ -274,6 +274,11 @@
             white-space: nowrap;
         }
 
+        .list-entry.is-complete .list-entry-name {
+            color: var(--accent-gold);
+            font-weight: 700;
+        }
+
         .backup-actions {
             display: flex;
             flex-direction: column;
@@ -1897,6 +1902,24 @@ FWC: 5,10,11"></textarea>
             return lines.join('\n');
         }
 
+        function formatNeededExport() {
+            const lines = [];
+            albumOrder.forEach(category => {
+                if (isTeamComplete(category)) {
+                    lines.push(`${category}: Voll,`);
+                    return;
+                }
+                const expanded = [];
+                getCategoryNumbers(category).forEach(num => {
+                    const qty = needed[`${category}_${num}`] || 0;
+                    for (let i = 0; i < qty; i++) expanded.push(num);
+                });
+                if (expanded.length === 0) return;
+                lines.push(`${category}: ${sortStickerNumbers(expanded).join(',')},`);
+            });
+            return lines.join('\n');
+        }
+
         const countryLookup = {};
         albumOrder.forEach(code => {
             countryLookup[code.toLowerCase()] = code;
@@ -2234,7 +2257,7 @@ FWC: 5,10,11"></textarea>
         }
 
         function exportNeededList() {
-            const text = formatCountryExport(needed);
+            const text = formatNeededExport();
             if (!text.trim()) {
                 showToast('Keine fehlenden Sticker eingetragen');
                 return;
@@ -2295,7 +2318,14 @@ FWC: 5,10,11"></textarea>
             const body = document.getElementById('neededListBody');
             const entries = [];
             albumOrder.forEach(category => {
-                if (isTeamComplete(category)) return;
+                if (isTeamComplete(category)) {
+                    entries.push({
+                        code: category,
+                        name: '✓ Voll',
+                        complete: true
+                    });
+                    return;
+                }
                 getCategoryNumbers(category).forEach(num => {
                     if (needed[`${category}_${num}`] > 0) {
                         entries.push({
@@ -2309,7 +2339,7 @@ FWC: 5,10,11"></textarea>
                 body.innerHTML = '<div class="no-results">Noch keine fehlenden Sticker eingetragen.<br>Modus „Brauche ich“ aktivieren und Sticker markieren.</div>';
             } else {
                 body.innerHTML = entries.map(e => `
-                    <div class="list-entry">
+                    <div class="list-entry${e.complete ? ' is-complete' : ''}">
                         <span class="list-entry-code">${e.code}</span>
                         <span class="list-entry-name">${e.name}</span>
                     </div>
