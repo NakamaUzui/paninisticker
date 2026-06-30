@@ -164,6 +164,12 @@
             color: var(--accent-gold);
         }
 
+        .tool-btn.danger {
+            background: rgba(239, 35, 60, 0.12);
+            border-color: rgba(239, 35, 60, 0.4);
+            color: var(--accent-red);
+        }
+
         .mode-toggle {
             display: flex;
             background: var(--bg-input);
@@ -1314,6 +1320,7 @@
                 <button type="button" class="tool-btn compare" onclick="openCompareModal()">🔎 Abgleich / Habe ich?</button>
                 <button type="button" class="tool-btn primary" onclick="exportTradeList()">📝 Tauschliste → Notizen</button>
                 <button type="button" class="tool-btn gold" onclick="openNeededListModal()">📋 Fehlende anzeigen</button>
+                <button type="button" class="tool-btn danger" onclick="resetAllDoubles()">🗑️ Doppelte zurücksetzen</button>
                 <button type="button" class="tool-btn" onclick="openBackupModal()">💾 Backup</button>
             </div>
             <input type="text" id="searchInput" class="search-input" placeholder="🔍 Land oder Spieler blitzschnell suchen (z.B. 'Haaland', 'GER', 'Glitzer')..." oninput="renderDashboard()">
@@ -2254,6 +2261,21 @@ FWC: 5,10,11"></textarea>
                 return;
             }
             shareToNotes('PANINI - DOPPELTE', text);
+        }
+
+        function resetAllDoubles() {
+            const totalDoubles = Object.values(quantities).reduce((s, q) => s + q, 0);
+            if (totalDoubles === 0) {
+                showToast('Keine Doppelten eingetragen');
+                return;
+            }
+            if (!confirm(`Alle ${totalDoubles} Doppelten löschen und neu eintragen?\n\n„Brauche ich“ und vollständige Teams bleiben erhalten.`)) return;
+            quantities = {};
+            saveData();
+            updateHeaderStats();
+            renderDashboard();
+            if (activeCategory) openModal(activeCategory);
+            showToast('✅ Alle Doppelten zurückgesetzt');
         }
 
         function exportNeededList() {
